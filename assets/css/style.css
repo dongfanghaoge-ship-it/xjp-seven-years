@@ -391,6 +391,26 @@ body {
   opacity: 0.25;
 }
 
+/* 真实图片 */
+.card-image {
+  margin-top: 1.2rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 168, 67, 0.2);
+}
+
+.card-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.3) brightness(0.9);
+  transition: filter 0.4s ease;
+}
+
+.card-image img:hover {
+  filter: sepia(0) brightness(1);
+}
+
 /* ============================================================
    打字机效果
    ============================================================ */
@@ -609,8 +629,8 @@ body {
     font-size: 1.25rem;
   }
 
-  .card-image-placeholder {
-    height: 200px;
+  .card-image {
+    margin-top: 1.5rem;
   }
 }
 

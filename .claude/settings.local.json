@@ -11,7 +11,17 @@
       "Bash(open *)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(git commit *)",
+      "Bash(brew ls *)",
+      "Bash(brew install *)",
+      "Bash(ncmdump *)",
+      "Bash(curl -sL -o img_01.jpg \"https://p5.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806524327650.jpg\")",
+      "Bash(curl -sL -o img_02.jpg \"https://p2.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806531822773.jpg\")",
+      "Bash(curl -sL -o img_03.jpg \"https://p5.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806534260293.jpg\")",
+      "Bash(curl -sL -o img_04.jpg \"https://p2.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806542971667.jpg\")",
+      "Bash(curl -sL -o img_05.jpg \"https://p5.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806545490898.jpg\")",
+      "Bash(git reset *)"
     ]
   }
 }

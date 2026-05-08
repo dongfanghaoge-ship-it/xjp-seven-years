@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
   if (startBtn && timelineSection) {
     startBtn.addEventListener('click', function () {
       timelineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // 平滑滚动完成后自动开始滚动
+      setTimeout(function () {
+        startAutoScroll();
+      }, 600);
     });
   }
 

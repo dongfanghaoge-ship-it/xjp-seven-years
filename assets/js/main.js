@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var scrollSpeed = 1.8; // px per frame
+  var scrollSpeed = 0.9; // px per frame
 
   function autoScrollStep() {
     if (!autoScrollActive) return;

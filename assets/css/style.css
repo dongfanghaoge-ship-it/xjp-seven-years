@@ -181,33 +181,38 @@ body {
 
 /* 自动滚动开关 */
 .auto-scroll-toggle {
-  display: block;
-  margin: 1.5rem auto 0;
-  padding: 0.55rem 1.5rem;
-  font-size: 0.82rem;
+  position: fixed;
+  top: 1rem;
+  right: 4rem;
+  z-index: 200;
+  padding: 0.45rem 1rem;
+  font-size: 0.72rem;
   font-family: 'Noto Serif SC', 'STSong', serif;
   font-weight: 500;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   color: rgba(255, 215, 0, 0.7);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(212, 168, 67, 0.2);
   border-radius: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   outline: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
 }
 
 .auto-scroll-toggle:hover {
   color: #FFD700;
   border-color: rgba(212, 168, 67, 0.4);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .auto-scroll-toggle.active {
   color: #FFD700;
   border-color: #FFD700;
-  background: rgba(212, 168, 67, 0.12);
+  background: rgba(212, 168, 67, 0.15);
   animation: toggleGlow 2s ease-in-out infinite;
 }
 
@@ -663,6 +668,13 @@ body {
     right: 1.5rem;
     width: 46px;
     height: 46px;
+  }
+
+  .auto-scroll-toggle {
+    top: 1.5rem;
+    right: 5rem;
+    font-size: 0.78rem;
+    padding: 0.5rem 1.2rem;
   }
 
   .audio-icon {

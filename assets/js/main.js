@@ -349,12 +349,14 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
+  var autoScrollStartedAt = 0; // 防抖：启动后短时间内忽略touchmove
   var scrollSpeed = 1.5; // px per tick
+  var scrollEl = document.scrollingElement || document.documentElement;
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
 
-    var maxTop = document.documentElement.scrollHeight - window.innerHeight;
+    var maxTop = scrollEl.scrollHeight - window.innerHeight;
     var newTop = window.scrollY + scrollSpeed;
 
     if (newTop >= maxTop - 10) {
@@ -374,9 +376,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     autoScrollActive = true;
+    autoScrollStartedAt = Date.now();
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
-    autoScrollTimer = setTimeout(autoScrollStep, 20);
+    autoScrollTimer = setTimeout(autoScrollStep, 30);
   }
 
   function stopAutoScroll() {
@@ -399,13 +402,25 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Stop auto-scroll on any user interaction
+    // Stop auto-scroll on wheel
     window.addEventListener('wheel', function () {
       if (autoScrollActive) stopAutoScroll();
     }, { passive: true });
 
-    window.addEventListener('touchmove', function () {
-      if (autoScrollActive) stopAutoScroll();
+    // Stop auto-scroll on intentional touch scroll (threshold + grace period)
+    var touchStartY = 0;
+    window.addEventListener('touchstart', function (e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', function (e) {
+      if (!autoScrollActive) return;
+      // 启动后500ms内忽略（防止tap时的微小抖动）
+      if (Date.now() - autoScrollStartedAt < 500) return;
+      // 移动超过10px才视为主动滑动
+      if (Math.abs(e.touches[0].clientY - touchStartY) > 10) {
+        stopAutoScroll();
+      }
     }, { passive: true });
   }
 

@@ -81,8 +81,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  window.addEventListener('scroll', updateTimelineProgress, { passive: true });
-  // 初始执行一次
+  // 节流版：最多50ms执行一次，减少getBoundingClientRect强制回流
+  var scrollHandlerThrottled = false;
+  window.addEventListener('scroll', function () {
+    if (scrollHandlerThrottled) return;
+    scrollHandlerThrottled = true;
+    requestAnimationFrame(function () {
+      updateTimelineProgress();
+      updateNavHighlight();
+      updateYearTransition();
+      scrollHandlerThrottled = false;
+    });
+  }, { passive: true });
   updateTimelineProgress();
 
   /* ==========================================================
@@ -143,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  window.addEventListener('scroll', updateNavHighlight, { passive: true });
   updateNavHighlight();
 
   /* ==========================================================
@@ -300,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  window.addEventListener('scroll', updateYearTransition, { passive: true });
   updateYearTransition();
 
   /* ==========================================================

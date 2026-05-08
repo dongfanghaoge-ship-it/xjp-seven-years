@@ -351,26 +351,30 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  // PC 慢速，手机稍快（rAF帧率更高需平衡）
+  var autoScrollTarget = 0; // 目标滚动位置
   var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-  var scrollSpeed = isMobile ? 2.5 : 0.7;
+  var scrollSpeed = isMobile ? 2.5 : 0.4;
+  var lastToggleClick = 0; // 防触摸误停
 
   function startAutoScroll() {
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
+      window.scrollTo(0, window.innerHeight);
     }
 
     autoScrollActive = true;
+    autoScrollTarget = window.scrollY;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
+    lastToggleClick = Date.now();
     autoScrollTimer = setInterval(function () {
       if (!autoScrollActive) return;
       var maxTop = document.documentElement.scrollHeight - window.innerHeight;
-      if (window.scrollY >= maxTop - 5) {
+      autoScrollTarget += scrollSpeed;
+      if (autoScrollTarget >= maxTop - 5) {
         stopAutoScroll();
         return;
       }
-      window.scrollBy(0, scrollSpeed);
+      window.scrollTo(0, Math.round(autoScrollTarget));
     }, 20);
   }
 
@@ -394,16 +398,18 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // 用户触摸屏幕 → 停止自动滚动（排除按钮本身）
-    window.addEventListener('touchstart', function (e) {
-      if (autoScrollActive && e.target !== autoScrollToggle) {
+    // 用户触摸屏幕 → 停止（按钮点击后300ms内不触发）
+    window.addEventListener('touchstart', function () {
+      if (autoScrollActive && Date.now() - lastToggleClick > 300) {
         stopAutoScroll();
       }
     }, { passive: true });
 
-    // 用户滚轮 → 停止自动滚动
+    // 用户滚轮 → 停止
     window.addEventListener('wheel', function () {
-      if (autoScrollActive) stopAutoScroll();
+      if (autoScrollActive && Date.now() - lastToggleClick > 300) {
+        stopAutoScroll();
+      }
     }, { passive: true });
   }
 

@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollTimer = null;
   var autoScrollTarget = 0; // 目标滚动位置
   var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-  var scrollSpeed = isMobile ? 1.4 : 0.4;
+  var scrollSpeed = isMobile ? 0.8 : 0.4;
   var lastToggleClick = 0; // 防触摸误停
 
   function startAutoScroll() {

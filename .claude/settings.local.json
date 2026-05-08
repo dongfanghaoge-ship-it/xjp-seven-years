@@ -22,7 +22,12 @@
       "Bash(curl -sL -o img_04.jpg \"https://p2.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806542971667.jpg\")",
       "Bash(curl -sL -o img_05.jpg \"https://p5.img.cctvpic.com/photoworkspace/contentimg/2017/08/18/2017081806545490898.jpg\")",
       "Bash(git reset *)",
-      "WebFetch(domain:news.cctv.com)"
+      "WebFetch(domain:news.cctv.com)",
+      "Bash(sed -n '74,76p' /Users/sjs/Desktop/xjp_CC/index.html)",
+      "Bash(sed -n '95,99p' /Users/sjs/Desktop/xjp_CC/index.html)",
+      "Bash(sed -n '118,122p' /Users/sjs/Desktop/xjp_CC/index.html)",
+      "Bash(sed -n '140,144p' /Users/sjs/Desktop/xjp_CC/index.html)",
+      "Bash(sed -n '165,167p' /Users/sjs/Desktop/xjp_CC/index.html)"
     ]
   }
 }

@@ -351,22 +351,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var scrollSpeed = 1.5;
-  var expectedScrollY = 0; // 自动滚动时期望的scroll位置
-
-  function autoScrollStep() {
-    if (!autoScrollActive) return;
-
-    var maxTop = document.documentElement.scrollHeight - window.innerHeight;
-    expectedScrollY = window.scrollY + scrollSpeed;
-
-    if (expectedScrollY >= maxTop - 5) {
-      stopAutoScroll();
-      return;
-    }
-
-    window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
-  }
+  // PC 慢速，手机稍快（rAF帧率更高需平衡）
+  var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+  var scrollSpeed = isMobile ? 2.5 : 0.7;
 
   function startAutoScroll() {
     if (window.scrollY < window.innerHeight * 0.5) {
@@ -374,10 +361,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     autoScrollActive = true;
-    expectedScrollY = window.scrollY;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
-    autoScrollTimer = setInterval(autoScrollStep, 20);
+    autoScrollTimer = setInterval(function () {
+      if (!autoScrollActive) return;
+      var maxTop = document.documentElement.scrollHeight - window.innerHeight;
+      if (window.scrollY >= maxTop - 5) {
+        stopAutoScroll();
+        return;
+      }
+      window.scrollBy(0, scrollSpeed);
+    }, 20);
   }
 
   function stopAutoScroll() {
@@ -400,11 +394,16 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // 滚动位置对比：实际偏离预期>2px → 用户手动操作
-    window.addEventListener('scroll', function () {
-      if (autoScrollActive && Math.abs(window.scrollY - expectedScrollY) > 2) {
+    // 用户触摸屏幕 → 停止自动滚动（排除按钮本身）
+    window.addEventListener('touchstart', function (e) {
+      if (autoScrollActive && e.target !== autoScrollToggle) {
         stopAutoScroll();
       }
+    }, { passive: true });
+
+    // 用户滚轮 → 停止自动滚动
+    window.addEventListener('wheel', function () {
+      if (autoScrollActive) stopAutoScroll();
     }, { passive: true });
   }
 

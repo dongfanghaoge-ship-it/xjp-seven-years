@@ -179,6 +179,58 @@ body {
   transform: translateY(0);
 }
 
+/* 自动滚动开关 */
+.auto-scroll-toggle {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.55rem 1.5rem;
+  font-size: 0.82rem;
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: rgba(255, 215, 0, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 168, 67, 0.2);
+  border-radius: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.auto-scroll-toggle:hover {
+  color: #FFD700;
+  border-color: rgba(212, 168, 67, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.auto-scroll-toggle.active {
+  color: #FFD700;
+  border-color: #FFD700;
+  background: rgba(212, 168, 67, 0.12);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
+  animation: togglePulse 2s ease-in-out infinite;
+}
+
+.auto-scroll-toggle .toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.auto-scroll-toggle.active .toggle-icon {
+  animation: toggleSpin 1.5s linear infinite;
+}
+
+@keyframes togglePulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.15); }
+  50% { box-shadow: 0 0 22px rgba(255, 215, 0, 0.3); }
+}
+
+@keyframes toggleSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 /* 侧边红绸带 */
 .cover-ribbon {
   position: absolute;

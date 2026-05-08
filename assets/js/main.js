@@ -318,4 +318,63 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', updateBackToTop, { passive: true });
   updateBackToTop();
 
+  /* ==========================================================
+     11. 自动滚动开关
+     ========================================================== */
+  var autoScrollToggle = document.getElementById('autoScrollToggle');
+  var autoScrollActive = false;
+  var autoScrollTimer = null;
+  var scrollSpeed = 0.4; // px per frame, very slow
+
+  function autoScrollStep() {
+    if (!autoScrollActive) return;
+    window.scrollBy(0, scrollSpeed);
+
+    // If reached bottom, stop
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 20) {
+      stopAutoScroll();
+      return;
+    }
+
+    autoScrollTimer = requestAnimationFrame(autoScrollStep);
+  }
+
+  function startAutoScroll() {
+    autoScrollActive = true;
+    autoScrollToggle.classList.add('active');
+    autoScrollToggle.querySelector('.toggle-icon').textContent = '⏸';
+    autoScrollToggle.childNodes[1].textContent = ' 暂停滚动';
+    autoScrollTimer = requestAnimationFrame(autoScrollStep);
+  }
+
+  function stopAutoScroll() {
+    autoScrollActive = false;
+    if (autoScrollTimer) {
+      cancelAnimationFrame(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+    autoScrollToggle.classList.remove('active');
+    autoScrollToggle.querySelector('.toggle-icon').textContent = '▶';
+    autoScrollToggle.childNodes[1].textContent = ' 自动滚动';
+  }
+
+  if (autoScrollToggle) {
+    autoScrollToggle.addEventListener('click', function () {
+      if (autoScrollActive) {
+        stopAutoScroll();
+      } else {
+        startAutoScroll();
+      }
+    });
+
+    // Stop auto-scroll on any user scroll
+    window.addEventListener('wheel', function () {
+      if (autoScrollActive) stopAutoScroll();
+    }, { passive: true });
+
+    window.addEventListener('touchmove', function () {
+      if (autoScrollActive) stopAutoScroll();
+    }, { passive: true });
+  }
+
 });

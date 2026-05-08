@@ -180,15 +180,144 @@ document.addEventListener('DOMContentLoaded', function () {
           audioStarted = true;
           audioBtn.classList.add('playing');
           audioBtn.classList.remove('muted');
-          if (audioIcon) audioIcon.textContent = '🎵'; // 🎵
+          if (audioIcon) audioIcon.textContent = '🎵';
         }).catch(function () {});
       } else {
         bgm.pause();
         audioBtn.classList.remove('playing');
         audioBtn.classList.add('muted');
-        if (audioIcon) audioIcon.textContent = '🔇'; // 🔇
+        if (audioIcon) audioIcon.textContent = '🔇';
       }
     });
   }
+
+  /* ==========================================================
+     7. 红星粒子飘落
+     ========================================================== */
+  var starsContainer = document.getElementById('stars-container');
+  var starSymbols = ['★', '✦', '✧', '⭑'];
+
+  function createStar() {
+    var star = document.createElement('span');
+    star.className = 'star-particle';
+    star.textContent = starSymbols[Math.floor(Math.random() * starSymbols.length)];
+    star.style.left = Math.random() * 100 + '%';
+    star.style.fontSize = (10 + Math.random() * 16) + 'px';
+    star.style.animationDuration = (12 + Math.random() * 18) + 's';
+    star.style.animationDelay = Math.random() * 15 + 's';
+    starsContainer.appendChild(star);
+
+    star.addEventListener('animationend', function () {
+      star.remove();
+    });
+  }
+
+  // 初始散布星星
+  for (var s = 0; s < 12; s++) {
+    setTimeout(function () { createStar(); }, Math.random() * 8000);
+  }
+
+  // 持续生成
+  setInterval(createStar, 2500);
+
+  /* ==========================================================
+     8. 照片点击灯箱
+     ========================================================== */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightbox-img');
+  var lightboxCaption = document.getElementById('lightbox-caption');
+  var lightboxClose = lightbox.querySelector('.lightbox-close');
+
+  function openLightbox(imgEl) {
+    lightboxImg.src = imgEl.src;
+    lightboxCaption.textContent = imgEl.alt || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+  }
+
+  // 点击卡片图片
+  var cardImages = document.querySelectorAll('.card-image img');
+  for (var ci = 0; ci < cardImages.length; ci++) {
+    cardImages[ci].addEventListener('click', function (e) {
+      e.stopPropagation();
+      openLightbox(this);
+    });
+    cardImages[ci].style.cursor = 'pointer';
+  }
+
+  // 关闭灯箱
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox || e.target === lightboxClose) {
+      closeLightbox();
+    }
+  });
+
+  // ESC 关闭
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+      closeLightbox();
+    }
+  });
+
+  /* ==========================================================
+     9. 年份过渡光点
+     ========================================================== */
+  var transitionDot = document.createElement('div');
+  transitionDot.className = 'year-transition-dot';
+  timelineSection.appendChild(transitionDot);
+
+  var prevYear = null;
+
+  function updateYearTransition() {
+    var currentYear = null;
+    for (var c3 = 0; c3 < allCards.length; c3++) {
+      var card = allCards[c3];
+      var rect = card.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.55) {
+        currentYear = card.dataset.year;
+      }
+    }
+
+    if (currentYear && currentYear !== prevYear) {
+      prevYear = currentYear;
+      var activeCard = document.querySelector('.card[data-year="' + currentYear + '"]');
+      if (activeCard) {
+        var cardTop = activeCard.getBoundingClientRect().top;
+        var timelineTop = timelineSection.getBoundingClientRect().top;
+        var relativeTop = cardTop - timelineTop + activeCard.offsetHeight * 0.1;
+        transitionDot.style.top = relativeTop + 'px';
+      }
+    }
+  }
+
+  window.addEventListener('scroll', updateYearTransition, { passive: true });
+  updateYearTransition();
+
+  /* ==========================================================
+     10. 回到顶部按钮
+     ========================================================== */
+  var backToTop = document.getElementById('backToTop');
+  var coverSection = document.getElementById('cover');
+
+  function updateBackToTop() {
+    if (window.scrollY > window.innerHeight * 0.6) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }
+
+  backToTop.addEventListener('click', function () {
+    coverSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  window.addEventListener('scroll', updateBackToTop, { passive: true });
+  updateBackToTop();
 
 });

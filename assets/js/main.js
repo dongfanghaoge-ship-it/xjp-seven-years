@@ -349,40 +349,39 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var autoScrollStartedAt = 0;
   var scrollSpeed = 1.5;
+  var expectedScrollY = 0; // 自动滚动时期望的scroll位置
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
 
     var maxTop = document.documentElement.scrollHeight - window.innerHeight;
+    expectedScrollY = window.scrollY + scrollSpeed;
 
-    if (window.scrollY >= maxTop - 5) {
-      window.scrollTo({ top: maxTop, behavior: 'auto' });
+    if (expectedScrollY >= maxTop - 5) {
       stopAutoScroll();
       return;
     }
 
-    window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
-    autoScrollTimer = requestAnimationFrame(autoScrollStep);
+    window.scrollBy(0, scrollSpeed);
   }
 
   function startAutoScroll() {
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
+      window.scrollTo(0, window.innerHeight);
     }
 
     autoScrollActive = true;
-    autoScrollStartedAt = Date.now();
+    expectedScrollY = window.scrollY;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
-    autoScrollTimer = requestAnimationFrame(autoScrollStep);
+    autoScrollTimer = setInterval(autoScrollStep, 20);
   }
 
   function stopAutoScroll() {
     autoScrollActive = false;
     if (autoScrollTimer) {
-      cancelAnimationFrame(autoScrollTimer);
+      clearInterval(autoScrollTimer);
       autoScrollTimer = null;
     }
     autoScrollToggle.classList.remove('active');
@@ -399,23 +398,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Stop auto-scroll on wheel
-    window.addEventListener('wheel', function () {
-      if (!autoScrollActive) return;
-      if (Date.now() - autoScrollStartedAt < 600) return;
-      stopAutoScroll();
-    }, { passive: true });
-
-    // Stop auto-scroll on intentional touch scroll
-    var touchStartY = 0;
-    window.addEventListener('touchstart', function (e) {
-      touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', function (e) {
-      if (!autoScrollActive) return;
-      if (Date.now() - autoScrollStartedAt < 600) return;
-      if (Math.abs(e.touches[0].clientY - touchStartY) > 8) {
+    // 滚动位置对比：实际偏离预期>2px → 用户手动操作
+    window.addEventListener('scroll', function () {
+      if (autoScrollActive && Math.abs(window.scrollY - expectedScrollY) > 2) {
         stopAutoScroll();
       }
     }, { passive: true });

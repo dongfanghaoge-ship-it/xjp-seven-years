@@ -65,6 +65,28 @@ body {
   pointer-events: none;
 }
 
+/* 书籍封面艺术化叠加 */
+.cover-book-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cover-book-cover img {
+  max-width: 55%;
+  max-height: 70%;
+  object-fit: contain;
+  opacity: 0.13;
+  filter: blur(0.5px) brightness(1.2);
+  transform: rotate(-2deg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
 .cover-content {
   position: relative;
   z-index: 2;
@@ -117,6 +139,7 @@ body {
   font-weight: 900;
   letter-spacing: 0.3em;
   line-height: 1.5;
+  white-space: nowrap;
   background: linear-gradient(
     90deg,
     #ffffff 0%,
@@ -144,10 +167,10 @@ body {
 
 /* 副标题 */
 .cover-subtitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.75);
   margin-top: 0.8rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   font-weight: 400;
 }
 

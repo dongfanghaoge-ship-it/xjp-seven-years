@@ -713,6 +713,101 @@ body {
 }
 
 /* ============================================================
+   视频卡片
+   ============================================================ */
+.video-card {
+  text-align: center;
+}
+
+.video-card::before {
+  display: none;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 168, 67, 0.2);
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-caption {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================
+   结语
+   ============================================================ */
+.epilogue-card {
+  text-align: center;
+  background: rgba(196, 30, 58, 0.08) !important;
+  border: 1px solid rgba(212, 168, 67, 0.25) !important;
+}
+
+.epilogue-card::before {
+  display: none;
+}
+
+.epilogue-content {
+  padding: 0.5rem 0;
+}
+
+.epilogue-emblem {
+  font-size: 2.5rem;
+  color: #FFD700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.epilogue-title {
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #FFD700;
+  letter-spacing: 0.5em;
+  margin-bottom: 0.3rem;
+}
+
+.epilogue-text {
+  font-size: 0.88rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: justify;
+  margin-bottom: 1rem;
+  text-indent: 2em;
+}
+
+.epilogue-final {
+  text-align: center !important;
+  text-indent: 0 !important;
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 1rem !important;
+  font-weight: 700;
+  color: #FFD700 !important;
+  margin-top: 2rem;
+  line-height: 2.5 !important;
+}
+
+@media (min-width: 768px) {
+  .epilogue-title { font-size: 2rem; letter-spacing: 0.6em; }
+  .epilogue-text { font-size: 0.95rem; line-height: 2.2; }
+  .epilogue-final { font-size: 1.15rem !important; }
+}
+
+/* ============================================================
    版权页
    ============================================================ */
 .copyright-card {

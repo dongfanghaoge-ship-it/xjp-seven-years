@@ -684,6 +684,10 @@ body {
   .card-image img {
     max-height: 320px;
   }
+
+  .copyright-line { font-size: 0.92rem; }
+  .copyright-activity { font-size: 1.2rem; }
+  .copyright-sub { font-size: 0.78rem; }
 }
 
 /* ============================================================
@@ -706,6 +710,54 @@ body {
   .cards-container {
     gap: 5rem;
   }
+}
+
+/* ============================================================
+   版权页
+   ============================================================ */
+.copyright-card {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(212, 168, 67, 0.12) !important;
+}
+
+.copyright-card::before {
+  display: none;
+}
+
+.copyright-content {
+  padding: 1rem 0;
+}
+
+.copyright-divider {
+  width: 40%;
+  max-width: 160px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.4), transparent);
+  margin: 1.2rem auto;
+}
+
+.copyright-line {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 2.2;
+  letter-spacing: 0.1em;
+}
+
+.copyright-activity {
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFD700;
+  letter-spacing: 0.2em;
+  margin-top: 0.3rem;
+}
+
+.copyright-sub {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.08em;
+  margin-top: 0.6rem;
 }
 
 /* ============================================================

@@ -1,0 +1,657 @@
+/* ============================================================
+   红心阅动，信仰有声 — H5 时间线叙事页
+   纯静态 HTML + CSS + 原生 JavaScript
+   ============================================================ */
+
+/* === Reset & Base === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(180deg, #8B1A1A 0%, #5C0A0A 100%);
+  background-attachment: fixed;
+  color: #fff;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   封面页
+   ============================================================ */
+#cover {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #C41E3A 0%, #8B1A1A 40%, #3D0000 100%);
+  overflow: hidden;
+}
+
+.cover-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.015) 40px,
+      rgba(255, 255, 255, 0.015) 41px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.015) 40px,
+      rgba(255, 255, 255, 0.015) 41px
+    );
+  pointer-events: none;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem 1.5rem;
+  max-width: 400px;
+}
+
+/* 党徽 ⭐ */
+.party-emblem {
+  font-size: 3.5rem;
+  color: #FFD700;
+  animation: emblemGlow 3s ease-in-out infinite;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes emblemGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 35px rgba(255, 215, 0, 0.9), 0 0 80px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* 活动名称 */
+.cover-activity {
+  font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: #FFD700;
+  margin-bottom: 0.8rem;
+}
+
+/* 分割线 */
+.cover-divider {
+  width: 65%;
+  max-width: 240px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFD700, transparent);
+  margin: 1.5rem auto;
+}
+
+/* 书名 — 光泽扫过动画 */
+.cover-title {
+  font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #FFD700 20%,
+    #ffffff 40%,
+    #FFD700 60%,
+    #ffffff 80%,
+    #FFD700 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* 副标题 */
+.cover-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 0.8rem;
+  letter-spacing: 0.2em;
+  font-weight: 400;
+}
+
+/* 开始阅读按钮 */
+.cover-btn {
+  margin-top: 3rem;
+  padding: 0.85rem 2.8rem;
+  font-size: 1.05rem;
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #fff;
+  background: linear-gradient(135deg, #C41E3A 0%, #8B1A1A 50%, #D4A843 100%);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cover-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 168, 67, 0.35);
+}
+
+.cover-btn:active {
+  transform: translateY(0);
+}
+
+/* 侧边红绸带 */
+.cover-ribbon {
+  position: absolute;
+  top: 0;
+  width: 12px;
+  height: 100%;
+  background: linear-gradient(180deg, #FFD700, #C41E3A 50%, #FFD700);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cover-ribbon.left {
+  left: 25px;
+}
+
+.cover-ribbon.right {
+  right: 25px;
+}
+
+/* ============================================================
+   时间线区域
+   ============================================================ */
+#timeline {
+  position: relative;
+  padding: 4rem 1.2rem 6rem;
+}
+
+/* 时间轴线 */
+.timeline-line {
+  position: absolute;
+  left: 1.8rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    rgba(212, 168, 67, 0.08) 0%,
+    rgba(212, 168, 67, 0.7) var(--progress, 0%),
+    rgba(212, 168, 67, 0.08) 100%
+  );
+  transition: background 0.15s linear;
+  pointer-events: none;
+}
+
+/* 卡片容器 */
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* 单张卡片 */
+.card {
+  position: relative;
+  margin-left: 2.5rem;
+  padding: 1.8rem 1.3rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(212, 168, 67, 0.18);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 时间轴金圆点 */
+.card::before {
+  content: '';
+  position: absolute;
+  left: calc(-2.5rem - 8px);
+  top: 2rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #FFD700;
+  border: 3px solid #8B1A1A;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+  transition: box-shadow 0.4s ease;
+}
+
+/* 当前活跃卡片圆点脉冲 */
+.card.active::before {
+  animation: dotPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 215, 0, 0.85), 0 0 45px rgba(255, 215, 0, 0.3);
+  }
+}
+
+/* 卡片淡入动效 */
+.fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 年份大数字 */
+.card-year {
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 0 2px 12px rgba(212, 168, 67, 0.3);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+/* 卡片标题 */
+.card-title {
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0.4rem 0 0.8rem;
+}
+
+/* 事件摘要 */
+.card-summary {
+  font-size: 0.9rem;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* 金句引用块 */
+.card-quote {
+  margin: 1.4rem 0;
+  padding: 0.9rem 1.1rem;
+  background: rgba(212, 168, 67, 0.08);
+  border-left: 3px solid #FFD700;
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #FFD700;
+  border-radius: 0 6px 6px 0;
+}
+
+/* 引号标记 */
+.quote-mark {
+  color: #FFD700;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+/* 金句文本（打字机目标） */
+.card-quote-text {
+  color: #FFD700;
+}
+
+/* 受访者回忆区 */
+.card-review {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border-left: 2px solid rgba(255, 215, 0, 0.25);
+}
+
+.review-label,
+.insight-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #D4A843;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.card-review p,
+.card-insight p {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* 成长感悟区 */
+.card-insight {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  background: rgba(196, 30, 58, 0.18);
+  border-radius: 8px;
+  border-left: 2px solid rgba(196, 30, 58, 0.5);
+}
+
+/* 图片占位 */
+.card-image-placeholder {
+  margin-top: 1.2rem;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(212, 168, 67, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 2rem;
+  opacity: 0.25;
+}
+
+/* ============================================================
+   打字机效果
+   ============================================================ */
+.typewriter {
+  border-right: 2px solid #FFD700;
+  overflow: hidden;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    border-color: #FFD700;
+  }
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* ============================================================
+   底部导航
+   ============================================================ */
+#timeline-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.8rem 0.4rem 1.2rem;
+  background: linear-gradient(0deg, rgba(61, 0, 0, 0.95) 0%, rgba(61, 0, 0, 0.75) 60%, transparent 100%);
+  z-index: 100;
+  pointer-events: none;
+}
+
+#timeline-nav * {
+  pointer-events: auto;
+}
+
+.nav-track {
+  display: flex;
+  justify-content: space-around;
+  max-width: 500px;
+  margin: 0 auto;
+  gap: 0.1rem;
+}
+
+.nav-dot {
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 0.3rem 0.4rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-dot.active {
+  color: #FFD700;
+  background: rgba(212, 168, 67, 0.18);
+  font-weight: 700;
+}
+
+.nav-dot:hover {
+  color: #FFD700;
+  background: rgba(212, 168, 67, 0.1);
+}
+
+/* ============================================================
+   音频按钮
+   ============================================================ */
+.audio-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 200;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.audio-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(212, 168, 67, 0.5);
+}
+
+.audio-btn.playing {
+  border-color: rgba(212, 168, 67, 0.7);
+  box-shadow: 0 0 15px rgba(212, 168, 67, 0.25);
+}
+
+.audio-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* ============================================================
+   PC 端响应式 (min-width: 768px)
+   ============================================================ */
+@media (min-width: 768px) {
+  /* 封面 */
+  #cover {
+    padding: 4rem;
+  }
+
+  .cover-content {
+    max-width: 600px;
+  }
+
+  .party-emblem {
+    font-size: 4.5rem;
+  }
+
+  .cover-activity {
+    font-size: 1.6rem;
+  }
+
+  .cover-title {
+    font-size: 2.8rem;
+  }
+
+  .cover-subtitle {
+    font-size: 1rem;
+  }
+
+  .cover-btn {
+    font-size: 1.15rem;
+    padding: 1rem 3rem;
+  }
+
+  .cover-ribbon.left {
+    left: 60px;
+  }
+
+  .cover-ribbon.right {
+    right: 60px;
+  }
+
+  /* 时间线 */
+  #timeline {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 6rem 2rem 8rem;
+  }
+
+  .timeline-line {
+    left: 2.5rem;
+  }
+
+  .cards-container {
+    gap: 4rem;
+  }
+
+  .card {
+    margin-left: 3.5rem;
+    padding: 2.5rem 2rem;
+  }
+
+  .card::before {
+    left: calc(-3.5rem - 8px);
+    width: 16px;
+    height: 16px;
+  }
+
+  .card-year {
+    font-size: 3.5rem;
+  }
+
+  .card-title {
+    font-size: 1.7rem;
+  }
+
+  .card-summary {
+    font-size: 0.95rem;
+  }
+
+  .card-quote {
+    font-size: 1.05rem;
+  }
+
+  .card-review p,
+  .card-insight p {
+    font-size: 0.92rem;
+  }
+
+  /* 导航 */
+  #timeline-nav {
+    padding: 1rem 0.5rem 1.5rem;
+  }
+
+  .nav-dot {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  /* 音频 */
+  .audio-btn {
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 46px;
+    height: 46px;
+  }
+
+  .audio-icon {
+    font-size: 1.25rem;
+  }
+
+  .card-image-placeholder {
+    height: 200px;
+  }
+}
+
+/* ============================================================
+   大屏进一步优化 (min-width: 1024px)
+   ============================================================ */
+@media (min-width: 1024px) {
+  #timeline {
+    max-width: 750px;
+  }
+
+  .cover-title {
+    font-size: 3.2rem;
+  }
+
+  .cover-activity {
+    font-size: 1.8rem;
+    letter-spacing: 0.4em;
+  }
+
+  .cards-container {
+    gap: 5rem;
+  }
+}
+
+/* ============================================================
+   暗色滚动条（WebKit）
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 67, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 168, 67, 0.5);
+}

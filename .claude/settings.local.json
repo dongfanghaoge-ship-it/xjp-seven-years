@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills *)",
+      "Bash(pip3 install *)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 *)",
+      "Bash(git -C /Users/sjs/Desktop/xjp_CC log --oneline -20)",
+      "Bash(pdftoppm -v)",
+      "WebSearch",
+      "Bash(open *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git rm *)"
+    ]
+  }
+}

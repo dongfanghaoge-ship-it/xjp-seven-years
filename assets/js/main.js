@@ -327,11 +327,11 @@ document.addEventListener('DOMContentLoaded', function () {
      ========================================================== */
   var videoOverlay = document.getElementById('videoOverlay');
   if (videoOverlay && bgm) {
-    videoOverlay.addEventListener('click', function () {
+    videoOverlay.addEventListener('click', function (e) {
+      e.stopPropagation(); // 防止冒泡到document触发tryPlayAudio
       // Pause BGM
       if (!bgm.paused) {
         bgm.pause();
-        audioStarted = false;
         if (audioBtn) {
           audioBtn.classList.remove('playing');
           audioBtn.classList.add('muted');

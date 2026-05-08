@@ -13,11 +13,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (startBtn && timelineSection) {
     startBtn.addEventListener('click', function () {
-      timelineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // 平滑滚动完成后自动开始滚动
+      // 即时跳转到时间线
+      var timelineTop = timelineSection.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: timelineTop, behavior: 'auto' });
+      // 立即开始自动滚动
       setTimeout(function () {
         startAutoScroll();
-      }, 600);
+      }, 100);
     });
   }
 
@@ -363,12 +365,12 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    window.scrollBy(0, scrollSpeed);
+    window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
   }
 
   function startAutoScroll() {
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo(0, window.innerHeight);
+      window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
     }
 
     autoScrollActive = true;

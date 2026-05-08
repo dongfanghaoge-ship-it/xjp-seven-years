@@ -351,10 +351,34 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var autoScrollTarget = 0; // 目标滚动位置
+  var autoScrollTarget = 0;
+  var autoScrollLastTime = 0;
+  // 手机15px/秒，PC 12px/秒（不受帧率影响）
   var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-  var scrollSpeed = isMobile ? 0.35 : 0.4;
-  var lastToggleClick = 0; // 防触摸误停
+  var scrollSpeedPerSec = isMobile ? 15 : 12;
+  var lastToggleClick = 0;
+
+  function autoScrollLoop(timestamp) {
+    if (!autoScrollActive) return;
+
+    if (!autoScrollLastTime) autoScrollLastTime = timestamp;
+    var elapsed = timestamp - autoScrollLastTime;
+    autoScrollLastTime = timestamp;
+
+    // 时间驱动的增量：elapsed毫秒应滚动的像素
+    var pixels = scrollSpeedPerSec * elapsed / 1000;
+    autoScrollTarget += pixels;
+
+    var maxTop = document.documentElement.scrollHeight - window.innerHeight;
+    if (autoScrollTarget >= maxTop - 5) {
+      window.scrollTo(0, maxTop);
+      stopAutoScroll();
+      return;
+    }
+
+    window.scrollTo(0, Math.round(autoScrollTarget));
+    autoScrollTimer = requestAnimationFrame(autoScrollLoop);
+  }
 
   function startAutoScroll() {
     if (window.scrollY < window.innerHeight * 0.5) {
@@ -363,25 +387,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     autoScrollActive = true;
     autoScrollTarget = window.scrollY;
+    autoScrollLastTime = 0;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
     lastToggleClick = Date.now();
-    autoScrollTimer = setInterval(function () {
-      if (!autoScrollActive) return;
-      var maxTop = document.documentElement.scrollHeight - window.innerHeight;
-      autoScrollTarget += scrollSpeed;
-      if (autoScrollTarget >= maxTop - 5) {
-        stopAutoScroll();
-        return;
-      }
-      window.scrollTo(0, Math.round(autoScrollTarget));
-    }, 20);
+    autoScrollTimer = requestAnimationFrame(autoScrollLoop);
   }
 
   function stopAutoScroll() {
     autoScrollActive = false;
     if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
+      cancelAnimationFrame(autoScrollTimer);
       autoScrollTimer = null;
     }
     autoScrollToggle.classList.remove('active');
@@ -398,14 +414,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // 用户触摸屏幕 → 停止（按钮点击后300ms内不触发）
     window.addEventListener('touchstart', function () {
       if (autoScrollActive && Date.now() - lastToggleClick > 300) {
         stopAutoScroll();
       }
     }, { passive: true });
 
-    // 用户滚轮 → 停止
     window.addEventListener('wheel', function () {
       if (autoScrollActive && Date.now() - lastToggleClick > 300) {
         stopAutoScroll();

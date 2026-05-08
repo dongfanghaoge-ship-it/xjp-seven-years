@@ -34,7 +34,9 @@
       "Read(//Users/sjs/.config/gh/**)",
       "Bash(pkill -f \"gh auth\")",
       "Bash(sudo chown sjs:staff ~/.config)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(curl -s \"https://dongfanghaoge-ship-it.github.io/xjp-seven-years/assets/js/main.js?v=6\")",
+      "Bash(curl -s \"https://dongfanghaoge-ship-it.github.io/xjp-seven-years/assets/js/main.js\")"
     ]
   }
 }

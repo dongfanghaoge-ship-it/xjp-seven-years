@@ -401,9 +401,10 @@ body {
 
 .card-image img {
   width: 100%;
-  max-height: 280px;
-  object-fit: cover;
+  max-height: 220px;
+  object-fit: contain;
   display: block;
+  background: rgba(0, 0, 0, 0.3);
   filter: sepia(0.3) brightness(0.9);
   transition: filter 0.4s ease;
 }
@@ -631,7 +632,7 @@ body {
   }
 
   .card-image img {
-    max-height: 380px;
+    max-height: 320px;
   }
 }
 

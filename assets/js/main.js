@@ -324,23 +324,26 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var scrollSpeed = 0.9; // px per frame
+  var scrollSpeed = 0.9; // px per interval tick
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
-    window.scrollBy(0, scrollSpeed);
 
-    // If reached bottom, stop
-    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 30) {
+    var currentTop = window.scrollY;
+    var newTop = currentTop + scrollSpeed;
+    var maxTop = document.documentElement.scrollHeight - window.innerHeight;
+
+    if (newTop >= maxTop) {
+      window.scrollTo({ top: maxTop, behavior: 'instant' });
       stopAutoScroll();
       return;
     }
 
-    autoScrollTimer = requestAnimationFrame(autoScrollStep);
+    window.scrollTo({ top: newTop, behavior: 'instant' });
   }
 
   function startAutoScroll() {
-    // If still on cover, instant jump to timeline
+    // If still on cover, jump past it
     if (window.scrollY < window.innerHeight * 0.5) {
       window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
     }
@@ -348,13 +351,13 @@ document.addEventListener('DOMContentLoaded', function () {
     autoScrollActive = true;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
-    autoScrollTimer = requestAnimationFrame(autoScrollStep);
+    autoScrollTimer = setInterval(autoScrollStep, 16); // ~60fps
   }
 
   function stopAutoScroll() {
     autoScrollActive = false;
     if (autoScrollTimer) {
-      cancelAnimationFrame(autoScrollTimer);
+      clearInterval(autoScrollTimer);
       autoScrollTimer = null;
     }
     autoScrollToggle.classList.remove('active');
@@ -370,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Stop auto-scroll on any user scroll
+    // Stop auto-scroll on any user interaction
     window.addEventListener('wheel', function () {
       if (autoScrollActive) stopAutoScroll();
     }, { passive: true });

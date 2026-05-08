@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var targetYear = this.dataset.target;
       var targetCard = document.querySelector('.card[data-year="' + targetYear + '"]');
       if (targetCard) {
-        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   }
@@ -324,40 +324,40 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var scrollSpeed = 0.9; // px per interval tick
+  var scrollSpeed = 1.5; // px per tick
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
 
-    var currentTop = window.scrollY;
-    var newTop = currentTop + scrollSpeed;
     var maxTop = document.documentElement.scrollHeight - window.innerHeight;
+    var newTop = window.scrollY + scrollSpeed;
 
-    if (newTop >= maxTop) {
-      window.scrollTo({ top: maxTop, behavior: 'instant' });
+    if (newTop >= maxTop - 10) {
+      window.scrollTo(0, maxTop);
       stopAutoScroll();
       return;
     }
 
-    window.scrollTo({ top: newTop, behavior: 'instant' });
+    window.scrollTo(0, newTop);
+    autoScrollTimer = setTimeout(autoScrollStep, 20);
   }
 
   function startAutoScroll() {
     // If still on cover, jump past it
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
+      window.scrollTo(0, window.innerHeight);
     }
 
     autoScrollActive = true;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
-    autoScrollTimer = setInterval(autoScrollStep, 16); // ~60fps
+    autoScrollTimer = setTimeout(autoScrollStep, 20);
   }
 
   function stopAutoScroll() {
     autoScrollActive = false;
     if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
+      clearTimeout(autoScrollTimer);
       autoScrollTimer = null;
     }
     autoScrollToggle.classList.remove('active');
@@ -365,7 +365,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (autoScrollToggle) {
-    autoScrollToggle.addEventListener('click', function () {
+    autoScrollToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
       if (autoScrollActive) {
         stopAutoScroll();
       } else {

@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollLastTime = 0;
   // 手机15px/秒，PC 12px/秒（不受帧率影响）
   var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-  var scrollSpeedPerSec = isMobile ? 15 : 12;
+  var scrollSpeedPerSec = isMobile ? 22 : 18;
   var lastToggleClick = 0;
 
   var autoScrollPending = 0; // 累积未滚动的像素

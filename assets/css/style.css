@@ -208,27 +208,12 @@ body {
   color: #FFD700;
   border-color: #FFD700;
   background: rgba(212, 168, 67, 0.12);
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
-  animation: togglePulse 2s ease-in-out infinite;
+  animation: toggleGlow 2s ease-in-out infinite;
 }
 
-.auto-scroll-toggle .toggle-icon {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.auto-scroll-toggle.active .toggle-icon {
-  animation: toggleSpin 1.5s linear infinite;
-}
-
-@keyframes togglePulse {
-  0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.15); }
-  50% { box-shadow: 0 0 22px rgba(255, 215, 0, 0.3); }
-}
-
-@keyframes toggleSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+@keyframes toggleGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.2); }
+  50% { box-shadow: 0 0 24px rgba(255, 215, 0, 0.45); }
 }
 
 /* 侧边红绸带 */

@@ -342,8 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function startAutoScroll() {
     autoScrollActive = true;
     autoScrollToggle.classList.add('active');
-    autoScrollToggle.querySelector('.toggle-icon').textContent = '⏸';
-    autoScrollToggle.childNodes[1].textContent = ' 暂停滚动';
+    autoScrollToggle.textContent = '暂停滚动';
     autoScrollTimer = requestAnimationFrame(autoScrollStep);
   }
 
@@ -354,8 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
       autoScrollTimer = null;
     }
     autoScrollToggle.classList.remove('active');
-    autoScrollToggle.querySelector('.toggle-icon').textContent = '▶';
-    autoScrollToggle.childNodes[1].textContent = ' 自动滚动';
+    autoScrollToggle.textContent = '自动滚动';
   }
 
   if (autoScrollToggle) {

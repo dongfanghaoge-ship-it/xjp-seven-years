@@ -324,14 +324,14 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var scrollSpeed = 0.4; // px per frame, very slow
+  var scrollSpeed = 1.8; // px per frame
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
     window.scrollBy(0, scrollSpeed);
 
     // If reached bottom, stop
-    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 20) {
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 30) {
       stopAutoScroll();
       return;
     }
@@ -340,6 +340,24 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function startAutoScroll() {
+    // If still on cover, jump to timeline first
+    if (window.scrollY < window.innerHeight * 0.5) {
+      timelineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Wait for smooth scroll to finish before starting auto
+      setTimeout(function () {
+        if (!autoScrollActive) return; // user may have cancelled
+        autoScrollActive = true;
+        autoScrollToggle.classList.add('active');
+        autoScrollToggle.textContent = '暂停滚动';
+        autoScrollTimer = requestAnimationFrame(autoScrollStep);
+      }, 800);
+      // Set active immediately for visual feedback
+      autoScrollActive = true;
+      autoScrollToggle.classList.add('active');
+      autoScrollToggle.textContent = '暂停滚动';
+      return;
+    }
+
     autoScrollActive = true;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';

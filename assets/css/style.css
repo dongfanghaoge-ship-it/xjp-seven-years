@@ -113,10 +113,11 @@ body {
 /* 书名 — 光泽扫过动画 */
 .cover-title {
   font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   line-height: 1.4;
+  white-space: nowrap;
   background: linear-gradient(
     90deg,
     #ffffff 0%,

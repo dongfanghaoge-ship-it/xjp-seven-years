@@ -349,43 +349,58 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;
   var autoScrollTimer = null;
-  var autoScrollStartedAt = 0; // 防抖：启动后短时间内忽略touchmove
-  var scrollSpeed = 1.5; // px per tick
-  var scrollEl = document.scrollingElement || document.documentElement;
+  var autoScrollStartedAt = 0;
+  var scrollSpeed = 1.5;
+  var lastScrollY = 0;  // 用于检测scrollTo是否生效
+  var stuckFrames = 0;  // 连续未移动帧数
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
 
-    var maxTop = scrollEl.scrollHeight - window.innerHeight;
-    var newTop = window.scrollY + scrollSpeed;
+    var maxTop = document.documentElement.scrollHeight - window.innerHeight;
 
-    if (newTop >= maxTop - 10) {
-      window.scrollTo({ top: maxTop, behavior: 'auto' });
+    if (window.scrollY >= maxTop - 5) {
+      window.scrollTo(0, maxTop);
       stopAutoScroll();
       return;
     }
 
-    window.scrollTo({ top: newTop, behavior: 'auto' });
-    autoScrollTimer = setTimeout(autoScrollStep, 20);
+    window.scrollBy(0, scrollSpeed);
+
+    // 检测卡死：连续10帧(200ms)scrollY不变则停止
+    if (window.scrollY === lastScrollY) {
+      stuckFrames++;
+      if (stuckFrames > 10) {
+        stopAutoScroll();
+        return;
+      }
+    } else {
+      stuckFrames = 0;
+    }
+    lastScrollY = window.scrollY;
+
+    autoScrollTimer = requestAnimationFrame(autoScrollStep);
   }
 
   function startAutoScroll() {
     // If still on cover, jump past it
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
+      window.scrollTo(0, window.innerHeight);
     }
 
     autoScrollActive = true;
     autoScrollStartedAt = Date.now();
+    lastScrollY = window.scrollY;
+    stuckFrames = 0;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
-    autoScrollTimer = setTimeout(autoScrollStep, 30);
+    autoScrollTimer = requestAnimationFrame(autoScrollStep);
   }
 
   function stopAutoScroll() {
     autoScrollActive = false;
     if (autoScrollTimer) {
-      clearTimeout(autoScrollTimer);
+      cancelAnimationFrame(autoScrollTimer);
       autoScrollTimer = null;
     }
     autoScrollToggle.classList.remove('active');
@@ -407,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (autoScrollActive) stopAutoScroll();
     }, { passive: true });
 
-    // Stop auto-scroll on intentional touch scroll (threshold + grace period)
+    // Stop auto-scroll on intentional touch scroll
     var touchStartY = 0;
     window.addEventListener('touchstart', function (e) {
       touchStartY = e.touches[0].clientY;
@@ -415,10 +430,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('touchmove', function (e) {
       if (!autoScrollActive) return;
-      // 启动后500ms内忽略（防止tap时的微小抖动）
-      if (Date.now() - autoScrollStartedAt < 500) return;
-      // 移动超过10px才视为主动滑动
-      if (Math.abs(e.touches[0].clientY - touchStartY) > 10) {
+      if (Date.now() - autoScrollStartedAt < 600) return;
+      if (Math.abs(e.touches[0].clientY - touchStartY) > 8) {
         stopAutoScroll();
       }
     }, { passive: true });

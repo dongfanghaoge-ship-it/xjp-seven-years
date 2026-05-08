@@ -360,12 +360,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var maxTop = document.documentElement.scrollHeight - window.innerHeight;
 
     if (window.scrollY >= maxTop - 5) {
-      window.scrollTo(0, maxTop);
+      window.scrollTo({ top: maxTop, behavior: 'auto' });
       stopAutoScroll();
       return;
     }
 
-    window.scrollBy(0, scrollSpeed);
+    window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
 
     // 检测卡死：连续10帧(200ms)scrollY不变则停止
     if (window.scrollY === lastScrollY) {
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function startAutoScroll() {
     // If still on cover, jump past it
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo(0, window.innerHeight);
+      window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
     }
 
     autoScrollActive = true;

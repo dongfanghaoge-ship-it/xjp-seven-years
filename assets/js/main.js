@@ -333,19 +333,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var newTop = window.scrollY + scrollSpeed;
 
     if (newTop >= maxTop - 10) {
-      window.scrollTo(0, maxTop);
+      window.scrollTo({ top: maxTop, behavior: 'auto' });
       stopAutoScroll();
       return;
     }
 
-    window.scrollTo(0, newTop);
+    window.scrollTo({ top: newTop, behavior: 'auto' });
     autoScrollTimer = setTimeout(autoScrollStep, 20);
   }
 
   function startAutoScroll() {
     // If still on cover, jump past it
     if (window.scrollY < window.innerHeight * 0.5) {
-      window.scrollTo(0, window.innerHeight);
+      window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
     }
 
     autoScrollActive = true;

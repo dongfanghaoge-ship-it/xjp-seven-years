@@ -340,22 +340,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function startAutoScroll() {
-    // If still on cover, jump to timeline first
+    // If still on cover, instant jump to timeline
     if (window.scrollY < window.innerHeight * 0.5) {
-      timelineSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Wait for smooth scroll to finish before starting auto
-      setTimeout(function () {
-        if (!autoScrollActive) return; // user may have cancelled
-        autoScrollActive = true;
-        autoScrollToggle.classList.add('active');
-        autoScrollToggle.textContent = '暂停滚动';
-        autoScrollTimer = requestAnimationFrame(autoScrollStep);
-      }, 800);
-      // Set active immediately for visual feedback
-      autoScrollActive = true;
-      autoScrollToggle.classList.add('active');
-      autoScrollToggle.textContent = '暂停滚动';
-      return;
+      window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
     }
 
     autoScrollActive = true;

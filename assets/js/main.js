@@ -351,8 +351,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var autoScrollTimer = null;
   var autoScrollStartedAt = 0;
   var scrollSpeed = 1.5;
-  var lastScrollY = 0;  // 用于检测scrollTo是否生效
-  var stuckFrames = 0;  // 连续未移动帧数
 
   function autoScrollStep() {
     if (!autoScrollActive) return;
@@ -366,32 +364,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
-
-    // 检测卡死：连续10帧(200ms)scrollY不变则停止
-    if (window.scrollY === lastScrollY) {
-      stuckFrames++;
-      if (stuckFrames > 10) {
-        stopAutoScroll();
-        return;
-      }
-    } else {
-      stuckFrames = 0;
-    }
-    lastScrollY = window.scrollY;
-
     autoScrollTimer = requestAnimationFrame(autoScrollStep);
   }
 
   function startAutoScroll() {
-    // If still on cover, jump past it
     if (window.scrollY < window.innerHeight * 0.5) {
       window.scrollTo({ top: window.innerHeight, behavior: 'auto' });
     }
 
     autoScrollActive = true;
     autoScrollStartedAt = Date.now();
-    lastScrollY = window.scrollY;
-    stuckFrames = 0;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
     autoScrollTimer = requestAnimationFrame(autoScrollStep);
@@ -419,7 +401,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Stop auto-scroll on wheel
     window.addEventListener('wheel', function () {
-      if (autoScrollActive) stopAutoScroll();
+      if (!autoScrollActive) return;
+      if (Date.now() - autoScrollStartedAt < 600) return;
+      stopAutoScroll();
     }, { passive: true });
 
     // Stop auto-scroll on intentional touch scroll

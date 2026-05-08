@@ -366,6 +366,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var scrollSpeedPerSec = isMobile ? 15 : 12;
   var lastToggleClick = 0;
 
+  var autoScrollPending = 0; // 累积未滚动的像素
+
   function autoScrollLoop(timestamp) {
     if (!autoScrollActive) return;
 
@@ -373,9 +375,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var elapsed = timestamp - autoScrollLastTime;
     autoScrollLastTime = timestamp;
 
-    // 时间驱动的增量：elapsed毫秒应滚动的像素
-    var pixels = scrollSpeedPerSec * elapsed / 1000;
-    autoScrollTarget += pixels;
+    // 累积像素，攒够1px才调用scrollTo（减少回流频率）
+    autoScrollPending += scrollSpeedPerSec * elapsed / 1000;
+    if (autoScrollPending < 1) {
+      autoScrollTimer = requestAnimationFrame(autoScrollLoop);
+      return;
+    }
+
+    var step = Math.floor(autoScrollPending);
+    autoScrollPending -= step;
+    autoScrollTarget += step;
 
     var maxTop = document.documentElement.scrollHeight - window.innerHeight;
     if (autoScrollTarget >= maxTop - 5) {
@@ -384,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    window.scrollTo(0, Math.round(autoScrollTarget));
+    window.scrollTo(0, autoScrollTarget);
     autoScrollTimer = requestAnimationFrame(autoScrollLoop);
   }
 
@@ -396,9 +405,11 @@ document.addEventListener('DOMContentLoaded', function () {
     autoScrollActive = true;
     autoScrollTarget = window.scrollY;
     autoScrollLastTime = 0;
+    autoScrollPending = 0;
     autoScrollToggle.classList.add('active');
     autoScrollToggle.textContent = '暂停滚动';
     lastToggleClick = Date.now();
+    document.body.classList.add('auto-scrolling');
     autoScrollTimer = requestAnimationFrame(autoScrollLoop);
   }
 
@@ -410,6 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     autoScrollToggle.classList.remove('active');
     autoScrollToggle.textContent = '自动滚动';
+    document.body.classList.remove('auto-scrolling');
   }
 
   if (autoScrollToggle) {

@@ -741,6 +741,42 @@ body {
   height: 100%;
 }
 
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+}
+
+.video-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-play-hint {
+  font-family: 'Noto Serif SC', 'STSong', serif;
+  font-size: 1rem;
+  color: #FFD700;
+  letter-spacing: 0.15em;
+  padding: 0.8rem 1.8rem;
+  border: 1px solid rgba(212, 168, 67, 0.4);
+  border-radius: 2rem;
+  background: rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.video-overlay:hover .video-play-hint {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: #FFD700;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.3);
+}
+
 .video-caption {
   font-size: 0.78rem;
   color: rgba(255, 255, 255, 0.4);

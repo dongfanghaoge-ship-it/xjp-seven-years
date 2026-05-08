@@ -319,7 +319,28 @@ document.addEventListener('DOMContentLoaded', function () {
   updateBackToTop();
 
   /* ==========================================================
-     11. 自动滚动开关
+     11. 视频播放时暂停背景音乐
+     ========================================================== */
+  var videoOverlay = document.getElementById('videoOverlay');
+  if (videoOverlay && bgm) {
+    videoOverlay.addEventListener('click', function () {
+      // Pause BGM
+      if (!bgm.paused) {
+        bgm.pause();
+        audioStarted = false;
+        if (audioBtn) {
+          audioBtn.classList.remove('playing');
+          audioBtn.classList.add('muted');
+        }
+        if (audioIcon) audioIcon.textContent = '🔇';
+      }
+      // Hide overlay so user can interact with iframe
+      videoOverlay.classList.add('hidden');
+    });
+  }
+
+  /* ==========================================================
+     12. 自动滚动开关
      ========================================================== */
   var autoScrollToggle = document.getElementById('autoScrollToggle');
   var autoScrollActive = false;

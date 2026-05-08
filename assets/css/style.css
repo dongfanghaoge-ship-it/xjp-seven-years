@@ -774,15 +774,6 @@ body {
   color: #FFD700;
 }
 
-.lightbox-caption {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
-  max-width: 80vw;
-  text-align: center;
-  cursor: default;
-}
-
 /* ============================================================
    年份过渡光点
    ============================================================ */

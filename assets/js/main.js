@@ -225,12 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
      ========================================================== */
   var lightbox = document.getElementById('lightbox');
   var lightboxImg = document.getElementById('lightbox-img');
-  var lightboxCaption = document.getElementById('lightbox-caption');
   var lightboxClose = lightbox.querySelector('.lightbox-close');
 
   function openLightbox(imgEl) {
     lightboxImg.src = imgEl.src;
-    lightboxCaption.textContent = imgEl.alt || '';
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
